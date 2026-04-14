@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لواء العلم</title>
+    <style>
+        /* 1. الإعدادات الأساسية */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            z-index: -10;
+        }
+        .active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        /* ----------------------------------- */
+        /* تصميم النافذة الترحيبية (Pop-up)    */
+        /* ----------------------------------- */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85); /* خلفية معتمة */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* أعلى طبقة فوق كل شيء */
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup-content {
+            background: linear-gradient(135deg, #fff 0%, #ffe6ea 100%);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            border: 4px solid #ff9a9e;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.5);
+            max-width: 400px;
+        }
+
+        .popup-content h2 {
+            margin: 0 0 15px 0;
+            color: #d84b6b;
+            font-size: 28px;
+        }
+
+        .popup-content p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        .enter-btn {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 12px 40px;
+            border: 2px solid #fff;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .enter-btn:hover {
+            transform: scale(1.08);
+        }
+
+        /* ----------------------------------- */
+        /* تصميم صفحة 0 (فيديو + بروفايلات)    */
+        /* ----------------------------------- */
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .intro-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .profiles-wrapper {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #ff9a9e;
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .profile-user {
+            font-size: 14px;
+            color: #fecfef;
+        }
+
+        .speech-text {
+            font-size: 24px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 183, 197, 0.3);
+            text-align: center;
+            max-width: 80%;
+            direction: rtl;
+            transition: opacity 1s ease;
+            min-height: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            color: #fff;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            padding: 15px 50px;
+            border: 4px solid #fff;
+            border-radius: 50px;
+            cursor: pointer;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.5);
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            position: absolute;
+            bottom: 20%;
+        }
+
+        .start-btn.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .start-btn:hover {
+            transform: scale(1.1) translateY(0);
+            box-shadow: 0 0 40px rgba(255, 105, 180, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        /* ----------------------------------- */
+        /* تصميم صفحة 1 (الشجرة + التليجرام)   */
+        /* ----------------------------------- */
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('lua1.jpg'); 
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        .telegram-button {
+            background-color: #0088cc;
+            color: white;
+            padding: 15px 35px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 10;
+            transition: transform 0.2s;
+        }
+
+        .telegram-button:hover {
+            transform: scale(1.05);
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="calm-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="welcome-popup" class="popup-overlay">
+        <div class="popup-content">
+            <h2>مرحباً بك 🌸</h2>
+            <p>اضغط للدخول إلى عالم لواء العلم والاستماع للموسيقى الهادئة.</p>
+            <button id="enter-btn" class="enter-btn">دخول الان</button>
+        </div>
+    </div>
+
+    <div id="page0" class="page active">
+        <video autoplay loop muted playsinline class="video-bg">
+            <source src="wallpaper.mp4" type="video/mp4">
+        </video>
+        
+        <div class="intro-container">
+            <div class="profiles-wrapper" id="profiles-wrapper">
+                <div class="profile">
+                    <img src="wale.jpg" alt="User 1">
+                    <div class="profile-name">ولي اللّٰهُ</div>
+                    <div class="profile-user">@feqik</div>
+                </div>
+                <div class="profile">
+                    <img src="Anakin.jpg" alt="User 2">
+                    <div class="profile-name">AnAkin</div>
+                    <div class="profile-user">@absolutelyLogic</div>
+                </div>
+            </div>
+
+            <div class="speech-text" id="speech-text"></div>
+            <button id="start-btn" class="start-btn">Start</button>
+        </div>
+    </div>
+
+    <div id="page1" class="page hidden">
+        <div class="background-image"></div>
+        <canvas id="particles"></canvas>
+        <div class="intro-container">
+            <a href="https://t.me/lua3lmbot" class="telegram-button" target="_blank">ارسل لنا رسالة يا جميل</a>
+        </div>
+    </div>
+
+    <script>
+        const welcomePopup = document.getElementById('welcome-popup');
+        const enterBtn = document.getElementById('enter-btn');
+        const bgMusic = document.getElementById('bg-music');
+        const speechEl = document.getElementById('speech-text');
+        const startBtn = document.getElementById('start-btn');
+        const page0 = document.getElementById('page0');
+        const page1 = document.getElementById('page1');
+
+        // 1. نظام إخفاء النافذة وتشغيل الموسيقى
+        enterBtn.addEventListener('click', () => {
+            // تشغيل الموسيقى فوراً
+            bgMusic.play();
+
+            // إخفاء الـ Pop-up بنعومة
+            welcomePopup.style.opacity = '0';
+            setTimeout(() => {
+                welcomePopup.style.display = 'none';
+                // نبدأ تأثير الكتابة بعد ما تختفي النافذة الترحيبية
+                typeWriter();
+            }, 500);
+        });
+
+        // 2. نظام كتابة النص الترحيبي (Typewriter)
+        const textToType = "مرحبا بكم في لواء العلم ، شباب وبنات مؤدبين ندرس العلوم والاهتمامات الجميلة المختلفة";
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < textToType.length) {
+                speechEl.innerHTML += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 40);
+            } else {
+                setTimeout(() => {
+                    speechEl.style.opacity = '0';
+                    setTimeout(() => {
+                        startBtn.classList.add('show');
+                    }, 800);
+                }, 2000); 
+            }
+        }
+
+        // 3. الانتقال من صفحة 0 الى صفحة 1
+        startBtn.addEventListener('click', () => {
+            page0.classList.remove('active');
+            page0.classList.add('hidden');
+            page1.classList.remove('hidden');
+            page1.classList.add('active');
+        });
+
+        // 4. نظام الرياح والأوراق لصفحة 1 (بدون تغيير)
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const petals = [];
+        const numberOfPetals = 75; 
+
+        for (let i = 0; i < numberOfPetals; i++) {
+            petals.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 4 + 2,
+                speedY: Math.random() * 1.5 + 0.5, 
+                speedX: Math.random() * 2 + 1      
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(255, 183, 197, 0.85)'; 
+            petals.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                p.y += p.speedY;
+                p.x += p.speedX;
+                if (p.y > canvas.height || p.x > canvas.width) {
+                    p.y = -10;
+                    p.x = Math.random() * canvas.width - 50;
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
