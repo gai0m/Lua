@@ -42,11 +42,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85); /* خلفية معتمة */
+            background: rgba(0, 0, 0, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999; /* أعلى طبقة فوق كل شيء */
+            z-index: 9999;
             transition: opacity 0.5s ease;
             backdrop-filter: blur(5px);
         }
@@ -115,7 +115,7 @@
 
         .profiles-wrapper {
             display: flex;
-            gap: 40px;
+            gap: 30px; /* قللنا المسافة شوية حتى تكفي 3 أشخاص براحة */
             margin-bottom: 30px;
             text-align: center;
             color: white;
@@ -129,8 +129,8 @@
         }
 
         .profile img {
-            width: 90px;
-            height: 90px;
+            width: 80px; /* صغرنا الحجم شوية للترتيب */
+            height: 80px;
             border-radius: 50%;
             border: 3px solid #ff9a9e;
             box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
@@ -139,13 +139,13 @@
         }
 
         .profile-name {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 2px;
         }
 
         .profile-user {
-            font-size: 14px;
+            font-size: 13px;
             color: #fecfef;
         }
 
@@ -261,14 +261,19 @@
         <div class="intro-container">
             <div class="profiles-wrapper" id="profiles-wrapper">
                 <div class="profile">
-                    <img src="wale.jpg" alt="User 1">
+                    <img src="image_2bfee2.jpg" alt="User 1">
                     <div class="profile-name">ولي اللّٰهُ</div>
                     <div class="profile-user">@feqik</div>
                 </div>
                 <div class="profile">
-                    <img src="Anakin.jpg" alt="User 2">
+                    <img src="image_2bff61.jpg" alt="User 2">
                     <div class="profile-name">AnAkin</div>
                     <div class="profile-user">@absolutelyLogic</div>
+                </div>
+                <div class="profile">
+                    <img src="enkido.jpg" alt="User 3">
+                    <div class="profile-name">Enkido</div>
+                    <div class="profile-user">@Enkido_0</div>
                 </div>
             </div>
 
@@ -281,7 +286,7 @@
         <div class="background-image"></div>
         <canvas id="particles"></canvas>
         <div class="intro-container">
-            <a href="https://t.me/lua3lmbot" class="telegram-button" target="_blank">ارسل لنا رسالة يا جميل</a>
+            <a href="https://t.me/lua3lmbot" class="telegram-button" target="_blank">دخول البوت Telegram</a>
         </div>
     </div>
 
@@ -294,21 +299,15 @@
         const page0 = document.getElementById('page0');
         const page1 = document.getElementById('page1');
 
-        // 1. نظام إخفاء النافذة وتشغيل الموسيقى
         enterBtn.addEventListener('click', () => {
-            // تشغيل الموسيقى فوراً
             bgMusic.play();
-
-            // إخفاء الـ Pop-up بنعومة
             welcomePopup.style.opacity = '0';
             setTimeout(() => {
                 welcomePopup.style.display = 'none';
-                // نبدأ تأثير الكتابة بعد ما تختفي النافذة الترحيبية
                 typeWriter();
             }, 500);
         });
 
-        // 2. نظام كتابة النص الترحيبي (Typewriter)
         const textToType = "مرحبا بكم في لواء العلم ، شباب وبنات مؤدبين ندرس العلوم والاهتمامات الجميلة المختلفة";
         let charIndex = 0;
 
@@ -327,7 +326,6 @@
             }
         }
 
-        // 3. الانتقال من صفحة 0 الى صفحة 1
         startBtn.addEventListener('click', () => {
             page0.classList.remove('active');
             page0.classList.add('hidden');
@@ -335,7 +333,6 @@
             page1.classList.add('active');
         });
 
-        // 4. نظام الرياح والأوراق لصفحة 1 (بدون تغيير)
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
