@@ -115,21 +115,25 @@
 
         .profiles-wrapper {
             display: flex;
-            gap: 30px; /* قللنا المسافة شوية حتى تكفي 3 أشخاص براحة */
+            flex-wrap: wrap; 
+            justify-content: center;
+            gap: 20px; 
             margin-bottom: 30px;
             text-align: center;
             color: white;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+            max-width: 800px; /* لضمان ترتيبهم بشكل حلو على الشاشات الكبيرة */
         }
 
         .profile {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100px; /* لتثبيت العرض وتجنب التخريب */
         }
 
         .profile img {
-            width: 80px; /* صغرنا الحجم شوية للترتيب */
+            width: 80px; 
             height: 80px;
             border-radius: 50%;
             border: 3px solid #ff9a9e;
@@ -139,13 +143,14 @@
         }
 
         .profile-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             margin-bottom: 2px;
+            white-space: nowrap;
         }
 
         .profile-user {
-            font-size: 13px;
+            font-size: 12px;
             color: #fecfef;
         }
 
@@ -182,7 +187,7 @@
             pointer-events: none;
             transform: translateY(20px);
             position: absolute;
-            bottom: 20%;
+            bottom: 10%;
         }
 
         .start-btn.show {
@@ -274,6 +279,21 @@
                     <img src="enkido.jpg" alt="User 3">
                     <div class="profile-name">Enkido</div>
                     <div class="profile-user">@Enkido_0</div>
+                </div>
+                <div class="profile">
+                    <img src="Null.jpg" alt="User 4">
+                    <div class="profile-name">Null</div>
+                    <div class="profile-user">@FloraNulla</div>
+                </div>
+                <div class="profile">
+                    <img src="Chosen.jpg" alt="User 5">
+                    <div class="profile-name">Chosen</div>
+                    <div class="profile-user">@AI_7kh</div>
+                </div>
+                <div class="profile">
+                    <img src="sufi.jpeg" alt="User 6">
+                    <div class="profile-name">Sufi</div>
+                    <div class="profile-user">@Q_UwU</div>
                 </div>
             </div>
 
